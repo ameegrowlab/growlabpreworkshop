@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrowLab — Pre-Workshop Questionnaire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Climate+Crisis&family=Archivo:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:    #303636;
+    --forest: #495A58;
+    --terra:  #D4967D;
+    --cream:  #E5E3DC;
+    --white:  #FFFFFF;
+    --error:  #C0392B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Archivo', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────────────────── */
+  .hero {
+    background: var(--ink);
+    padding: 40px 28px 36px;
+    border-bottom: 5px solid var(--terra);
+  }
+  .hero-inner { max-width: 680px; margin: 0 auto; }
+  .eyebrow {
+    font-family: 'Climate Crisis', sans-serif;
+    font-size: 12px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--terra);
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-family: 'Climate Crisis', sans-serif;
+    font-size: clamp(28px, 5vw, 42px);
+    color: var(--white); line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .hero p {
+    color: var(--cream); font-size: 14.5px;
+    max-width: 520px; line-height: 1.6;
+  }
+
+  /* ── HOW IT WORKS BANNER ────────────────────────────────────────── */
+  .how {
+    background: var(--terra);
+    padding: 16px 28px;
+  }
+  .how-inner {
+    max-width: 680px; margin: 0 auto;
+    display: flex; gap: 28px; flex-wrap: wrap;
+  }
+  .how-step {
+    display: flex; align-items: flex-start; gap: 10px;
+    color: var(--white); font-size: 13.5px;
+  }
+  .step-num {
+    font-family: 'Climate Crisis', sans-serif;
+    font-size: 22px; color: var(--white);
+    line-height: 1; flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  /* ── WRAP ───────────────────────────────────────────────────────── */
+  .wrap { max-width: 680px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  /* ── SECTION CARDS ──────────────────────────────────────────────── */
+  .section {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 24px 26px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(48,54,54,0.07);
+  }
+  .sec-head {
+    display: flex; align-items: flex-start; gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--cream);
+  }
+  .badge {
+    flex: 0 0 auto; width: 32px; height: 32px;
+    border-radius: 50%; background: var(--terra);
+    color: var(--white); font-family: 'Climate Crisis', sans-serif;
+    font-size: 15px; display: flex;
+    align-items: center; justify-content: center;
+  }
+  .sec-title {
+    font-family: 'Climate Crisis', sans-serif;
+    font-size: 18px; margin-bottom: 2px;
+  }
+  .sec-note { font-size: 13px; color: var(--forest); }
+
+  /* ── FIELDS ─────────────────────────────────────────────────────── */
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 520px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  label, .field-label {
+    display: block;
+    font-size: 12.5px; font-weight: 700;
+    color: var(--forest); text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 7px;
+  }
+  .required-star { color: var(--terra); }
+  .optional { font-weight: 400; text-transform: none; letter-spacing: 0; color: #999; font-size: 11.5px; }
+
+  input[type="text"], input[type="date"], textarea, select {
+    width: 100%; background: var(--cream);
+    border: 2px solid var(--cream); border-radius: 10px;
+    padding: 10px 13px; font-family: 'Archivo', sans-serif;
+    font-size: 15px; color: var(--ink);
+    transition: border-color 0.15s; appearance: none;
+  }
+  input[type="text"]:focus, input[type="date"]:focus,
+  textarea:focus, select:focus {
+    outline: none; border-color: var(--terra); background: var(--white);
+  }
+  textarea { resize: vertical; min-height: 72px; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23495A58' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 13px center;
+    padding-right: 36px; cursor: pointer; }
+
+  /* ── CHECKBOXES ─────────────────────────────────────────────────── */
+  .check-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .check-item {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--cream); border-radius: 8px;
+    padding: 8px 13px; cursor: pointer;
+    font-size: 14px; color: var(--ink);
+    border: 2px solid transparent; transition: all 0.12s;
+    user-select: none;
+  }
+  .check-item input[type="checkbox"] {
+    width: 16px; height: 16px; accent-color: var(--terra);
+    cursor: pointer; flex-shrink: 0;
+    border: none; background: none; padding: 0;
+  }
+  .check-item:has(input:checked) {
+    background: #FBF0EA; border-color: var(--terra);
+  }
+
+  /* ── CONDITIONAL FIELD ──────────────────────────────────────────── */
+  .conditional { display: none; margin-top: 12px; }
+  .conditional.visible { display: block; }
+
+  /* ── SUBMIT SECTION ─────────────────────────────────────────────── */
+  .submit-section {
+    background: var(--ink); border-radius: 16px;
+    padding: 28px 26px; margin-top: 8px;
+  }
+  .submit-section h3 {
+    font-family: 'Climate Crisis', sans-serif;
+    font-size: 20px; color: var(--white); margin-bottom: 8px;
+  }
+  .submit-section p {
+    color: var(--cream); font-size: 14px;
+    margin-bottom: 20px; line-height: 1.6;
+  }
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Climate Crisis', sans-serif;
+    font-size: 15px; border: none; border-radius: 10px;
+    padding: 14px 22px; cursor: pointer;
+    transition: opacity 0.12s; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn-primary { background: var(--terra); color: var(--white); }
+  .btn-secondary { background: rgba(255,255,255,0.12); color: var(--white); border: 2px solid rgba(255,255,255,0.25); }
+  .btn-note { font-size: 12px; color: var(--cream); opacity: 0.7; margin-top: 10px; }
+
+  /* ── SUCCESS STATE ──────────────────────────────────────────────── */
+  .copy-confirm {
+    display: none; background: #E1F5EE; border-radius: 10px;
+    padding: 14px 16px; margin-top: 14px;
+    font-size: 14px; color: #085041; line-height: 1.5;
+    border-left: 4px solid #7ECEC4;
+  }
+  .copy-confirm.visible { display: block; }
+  .copy-confirm strong { display: block; margin-bottom: 4px; font-size: 15px; }
+
+  /* ── VALIDATION ─────────────────────────────────────────────────── */
+  .field-error { display: none; color: var(--error); font-size: 12.5px; margin-top: 5px; }
+  .has-error input, .has-error textarea, .has-error select { border-color: var(--error) !important; }
+  .has-error .field-error { display: block; }
+
+  footer {
+    text-align: center; color: var(--forest);
+    font-size: 12px; margin-top: 28px; padding-bottom: 20px;
+  }
+
+  @media print { body { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">GrowLab · The Money Map™</div>
+    <h1>Pre-Workshop<br>Questionnaire</h1>
+    <p>Thanks for taking a few minutes to complete this before our session. Your answers help Amee tailor the workshop to the students in your room.</p>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how">
+  <div class="how-inner">
+    <div class="how-step">
+      <div class="step-num">1</div>
+      <div>Fill in the form below<br><strong>takes about 3 minutes</strong></div>
+    </div>
+    <div class="how-step">
+      <div class="step-num">2</div>
+      <div>Click <strong>Send to Amee</strong><br>opens your email, ready to send</div>
+    </div>
+    <div class="how-step">
+      <div class="step-num">3</div>
+      <div>If email doesn't open<br><strong>use Copy Answers instead</strong> and paste into an email to amee@growlab.au</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ══ SECTION 1 — ABOUT YOU ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge">1</div>
+      <div>
+        <div class="sec-title">About you and your school</div>
+        <p class="sec-note">Your details so Amee can reference this before the session.</p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field" id="f-name">
+        <label>Full name <span class="required-star">*</span></label>
+        <input type="text" id="name" placeholder="Your full name">
+        <div class="field-error">Please enter your name</div>
+      </div>
+      <div class="field" id="f-role">
+        <label>Job title / role <span class="required-star">*</span></label>
+        <input type="text" id="role" placeholder="e.g. Career Taster Coordinator">
+        <div class="field-error">Please enter your role</div>
+      </div>
+    </div>
+    <div class="field" id="f-school">
+      <label>School name <span class="required-star">*</span></label>
+      <input type="text" id="school" placeholder="Full school name">
+      <div class="field-error">Please enter your school name</div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2 — THE WORKSHOP ════════════════════════════════════ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge">2</div>
+      <div>
+        <div class="sec-title">The workshop</div>
+        <p class="sec-note">Confirm the session details so everything is aligned.</p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field" id="f-program">
+        <label>Program booked <span class="required-star">*</span></label>
+        <select id="program">
+          <option value="">Select program</option>
+          <option>The Money Map</option>
+          <option>Build It</option>
+          <option>Future Ready AI</option>
+        </select>
+        <div class="field-error">Please select a program</div>
+      </div>
+      <div class="field" id="f-format">
+        <label>Format booked <span class="required-star">*</span></label>
+        <select id="format">
+          <option value="">Select format</option>
+          <option>1-Hour</option>
+          <option>2-Hour</option>
+        </select>
+        <div class="field-error">Please select a format</div>
+      </div>
+      <div class="field" id="f-wdate">
+        <label>Workshop date <span class="required-star">*</span></label>
+        <input type="date" id="wdate">
+        <div class="field-error">Please select a date</div>
+      </div>
+      <div class="field">
+        <label>Workshop time <span class="optional">(optional)</span></label>
+        <input type="text" id="wtime" placeholder="e.g. 9:00 am">
+      </div>
+      <div class="field">
+        <label>Room or location <span class="optional">(optional)</span></label>
+        <input type="text" id="room" placeholder="e.g. Room 14, Hall, Library">
+      </div>
+      <div class="field" id="f-students">
+        <label>Approx. number of students <span class="required-star">*</span></label>
+        <input type="text" id="students" placeholder="e.g. 28">
+        <div class="field-error">Please enter an approximate number</div>
+      </div>
+    </div>
+    <div class="field" id="f-year">
+      <label>Year group <span class="required-star">*</span></label>
+      <select id="year">
+        <option value="">Select year group</option>
+        <option>Year 8</option>
+        <option>Year 9</option>
+        <option>Year 10</option>
+        <option>Year 11</option>
+        <option>Year 12</option>
+        <option>Mixed year groups</option>
+      </select>
+      <div class="field-error">Please select a year group</div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3 — THE STUDENTS ════════════════════════════════════ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge">3</div>
+      <div>
+        <div class="sec-title">About the students</div>
+        <p class="sec-note">This helps Amee tailor examples and pitch the session at the right level.</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Age range <span class="optional">(tick all that apply)</span></div>
+      <div class="check-group">
+        <label class="check-item"><input type="checkbox" name="ages" value="14"> 14</label>
+        <label class="check-item"><input type="checkbox" name="ages" value="15"> 15</label>
+        <label class="check-item"><input type="checkbox" name="ages" value="16"> 16</label>
+        <label class="check-item"><input type="checkbox" name="ages" value="17–18"> 17–18</label>
+      </div>
+    </div>
+
+    <div class="field" id="f-jobs">
+      <label>Approx. % of students who have a first job <span class="required-star">*</span></label>
+      <select id="jobs">
+        <option value="">Select an option</option>
+        <option>Most do</option>
+        <option>About half</option>
+        <option>A few</option>
+        <option>Almost none</option>
+        <option>Unknown</option>
+      </select>
+      <div class="field-error">Please select an option</div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">School stream or cohort <span class="optional">(tick all that apply)</span></div>
+      <div class="check-group">
+        <label class="check-item"><input type="checkbox" name="stream" value="Academic / ATAR"> Academic / ATAR</label>
+        <label class="check-item"><input type="checkbox" name="stream" value="Vocational / VET"> Vocational / VET</label>
+        <label class="check-item"><input type="checkbox" name="stream" value="Mixed"> Mixed</label>
+        <label class="check-item"><input type="checkbox" name="stream" value="Alternative pathway"> Alternative pathway</label>
+        <label class="check-item"><input type="checkbox" name="stream" value="Extension"> Extension</label>
+        <label class="check-item"><input type="checkbox" name="stream" value="SAER"> SAER</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Main career interests in this group <span class="optional">(tick all that apply)</span></div>
+      <div class="check-group">
+        <label class="check-item"><input type="checkbox" name="careers" value="Trades and construction"> Trades and construction</label>
+        <label class="check-item"><input type="checkbox" name="careers" value="Health and care"> Health and care</label>
+        <label class="check-item"><input type="checkbox" name="careers" value="Business and finance"> Business and finance</label>
+        <label class="check-item"><input type="checkbox" name="careers" value="Tech and digital"> Tech and digital</label>
+        <label class="check-item"><input type="checkbox" name="careers" value="Creative arts"> Creative arts</label>
+        <label class="check-item"><input type="checkbox" name="careers" value="Retail and hospitality"> Retail and hospitality</label>
+        <label class="check-item"><input type="checkbox" name="careers" value="Unsure or mixed"> Unsure or mixed</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>General engagement style</label>
+      <select id="energy">
+        <option value="">Select an option</option>
+        <option>High energy and chatty</option>
+        <option>Solid and steady</option>
+        <option>Quiet and reserved</option>
+        <option>Hard to predict</option>
+        <option>Variable</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Any students with specific learning needs I should know about? <span class="optional">(optional)</span></label>
+      <textarea id="needs" placeholder="Any support needs, adjustments or students to be mindful of"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Any topics that are sensitive for this group? <span class="optional">(optional)</span></label>
+      <textarea id="sensitive" placeholder="Money stress at home, recent events, anything that needs careful handling"></textarea>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4 — TAILORING ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge">4</div>
+      <div>
+        <div class="sec-title">Tailoring the session</div>
+        <p class="sec-note">Context that helps Amee calibrate examples and depth.</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Has this group had any prior money or financial education?</label>
+      <select id="prior" onchange="togglePrior()">
+        <option value="">Select an option</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+        <option value="Unsure">Unsure</option>
+      </select>
+    </div>
+    <div class="conditional field" id="prior-detail">
+      <label>Please give a brief overview of what they've covered</label>
+      <textarea id="priorDetail" placeholder="e.g. They completed a unit on budgeting last term"></textarea>
+    </div>
+
+    <div class="field">
+      <label>What do you hope students take away from this session?</label>
+      <textarea id="goal" placeholder="In your own words — this is helpful for Amee when closing the session"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Anything else Amee should know before walking in? <span class="optional">(optional)</span></label>
+      <textarea id="other" placeholder="Local context, how this fits into a broader program, anything relevant"></textarea>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 5 — AV + TECH ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge">5</div>
+      <div>
+        <div class="sec-title">AV and tech setup</div>
+        <p class="sec-note">This needs to be sorted before the session — not on the day.</p>
+      </div>
+    </div>
+
+    <div class="field" id="f-av">
+      <label>Screen connection available <span class="required-star">*</span></label>
+      <select id="av">
+        <option value="">Select an option</option>
+        <option>HDMI</option>
+        <option>USB-C</option>
+        <option>Bluetooth / wireless</option>
+        <option>Adaptor needed — unsure of type</option>
+        <option>Will confirm closer to date</option>
+      </select>
+      <div class="field-error">Please select a connection type</div>
+    </div>
+
+    <div class="field" id="f-wifi">
+      <label>Is school WiFi available? <span class="required-star">*</span></label>
+      <select id="wifi">
+        <option value="">Select an option</option>
+        <option>Yes</option>
+        <option>No</option>
+        <option>Unsure</option>
+      </select>
+      <div class="field-error">Please select an option</div>
+    </div>
+
+    <div class="field" id="f-devices">
+      <label>Will students have devices in the room? <span class="required-star">*</span></label>
+      <select id="devices">
+        <option value="">Select an option</option>
+        <option>Yes — laptops or tablets</option>
+        <option>Some will have devices — students can partner up</option>
+        <option>No devices</option>
+      </select>
+      <div class="field-error">Please select an option</div>
+    </div>
+
+    <div class="field">
+      <label>Any other AV or tech notes <span class="optional">(optional)</span></label>
+      <input type="text" id="avnotes" placeholder="Anything unusual about the setup">
+    </div>
+  </div>
+
+  <!-- ══ SUBMIT ═══════════════════════════════════════════════════════ -->
+  <div class="submit-section">
+    <h3>Ready to send?</h3>
+    <p>Click <strong>Send to Amee</strong> — this will open your email with your answers already filled in. Just hit send.<br>
+    If that doesn't work, use <strong>Copy Answers</strong> and paste into an email to <strong>amee@growlab.au</strong></p>
+    <div class="btn-row">
+      <a id="mailtoBtn" href="#" class="btn btn-primary" onclick="return submitMailto()">
+        ✉ Send to Amee
+      </a>
+      <button class="btn btn-secondary" onclick="copyAnswers()">
+        ⎘ Copy Answers
+      </button>
+    </div>
+    <p class="btn-note">Fields marked <span style="color:var(--terra)">*</span> are required before submitting.</p>
+    <div class="copy-confirm" id="copyConfirm">
+      <strong>✓ Answers copied to clipboard</strong>
+      Now paste into an email to <strong>amee@growlab.au</strong> with the subject line: <strong>Pre-Workshop Questionnaire — [Your School Name]</strong>
+    </div>
+  </div>
+
+  <footer>GrowLab · The Money Map™ · growlab.au · amee@growlab.au</footer>
+</div>
+
+<script>
+  // ── CONDITIONAL FIELD ─────────────────────────────────────────────
+  function togglePrior() {
+    const val = document.getElementById('prior').value;
+    const detail = document.getElementById('prior-detail');
+    detail.classList.toggle('visible', val === 'Yes');
+  }
+
+  // ── VALIDATION ────────────────────────────────────────────────────
+  const required = [
+    { wrap: 'f-name',     id: 'name' },
+    { wrap: 'f-role',     id: 'role' },
+    { wrap: 'f-school',   id: 'school' },
+    { wrap: 'f-program',  id: 'program' },
+    { wrap: 'f-format',   id: 'format' },
+    { wrap: 'f-wdate',    id: 'wdate' },
+    { wrap: 'f-students', id: 'students' },
+    { wrap: 'f-year',     id: 'year' },
+    { wrap: 'f-jobs',     id: 'jobs' },
+    { wrap: 'f-av',       id: 'av' },
+    { wrap: 'f-wifi',     id: 'wifi' },
+    { wrap: 'f-devices',  id: 'devices' },
+  ];
+
+  function validate() {
+    let ok = true;
+    required.forEach(({ wrap, id }) => {
+      const el = document.getElementById(id);
+      const wEl = document.getElementById(wrap);
+      const empty = !el.value.trim();
+      wEl.classList.toggle('has-error', empty);
+      if (empty) ok = false;
+    });
+    if (!ok) {
+      document.querySelector('.has-error').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return ok;
+  }
+
+  // ── BUILD ANSWERS TEXT ─────────────────────────────────────────────
+  function getCheckboxValues(name) {
+    return [...document.querySelectorAll(`input[name="${name}"]:checked`)]
+      .map(el => el.value).join(', ') || 'Not specified';
+  }
+
+  function val(id) {
+    const el = document.getElementById(id);
+    return el ? el.value.trim() || 'Not specified' : 'Not specified';
+  }
+
+  function buildText() {
+    const school = document.getElementById('school').value.trim() || 'School';
+    const lines = [];
+    lines.push('PRE-WORKSHOP QUESTIONNAIRE — GROWLAB');
+    lines.push('═'.repeat(42));
+    lines.push('');
+    lines.push('ABOUT YOU AND YOUR SCHOOL');
+    lines.push(`Name: ${val('name')}`);
+    lines.push(`Role: ${val('role')}`);
+    lines.push(`School: ${val('school')}`);
+    lines.push('');
+    lines.push('THE WORKSHOP');
+    lines.push(`Program: ${val('program')}`);
+    lines.push(`Format: ${val('format')}`);
+    lines.push(`Date: ${val('wdate')}`);
+    lines.push(`Time: ${val('wtime')}`);
+    lines.push(`Room: ${val('room')}`);
+    lines.push(`Number of students: ${val('students')}`);
+    lines.push(`Year group: ${val('year')}`);
+    lines.push('');
+    lines.push('ABOUT THE STUDENTS');
+    lines.push(`Age range: ${getCheckboxValues('ages')}`);
+    lines.push(`First job split: ${val('jobs')}`);
+    lines.push(`School stream: ${getCheckboxValues('stream')}`);
+    lines.push(`Career interests: ${getCheckboxValues('careers')}`);
+    lines.push(`Engagement style: ${val('energy')}`);
+    lines.push(`Learning needs: ${val('needs')}`);
+    lines.push(`Sensitive topics: ${val('sensitive')}`);
+    lines.push('');
+    lines.push('TAILORING THE SESSION');
+    const prior = val('prior');
+    lines.push(`Prior financial education: ${prior}`);
+    if (prior === 'Yes') {
+      lines.push(`Overview: ${val('priorDetail')}`);
+    }
+    lines.push(`School goal for this session: ${val('goal')}`);
+    lines.push(`Other context: ${val('other')}`);
+    lines.push('');
+    lines.push('AV AND TECH SETUP');
+    lines.push(`Screen connection: ${val('av')}`);
+    lines.push(`School WiFi: ${val('wifi')}`);
+    lines.push(`Student devices: ${val('devices')}`);
+    lines.push(`AV notes: ${val('avnotes')}`);
+    lines.push('');
+    lines.push('─'.repeat(42));
+    lines.push('Sent via GrowLab Pre-Workshop Questionnaire · growlab.au');
+    return { text: lines.join('\n'), school };
+  }
+
+  // ── MAILTO SUBMIT ─────────────────────────────────────────────────
+  function submitMailto() {
+    if (!validate()) return false;
+    const { text, school } = buildText();
+    const subject = encodeURIComponent(`Pre-Workshop Questionnaire — ${school}`);
+    const body = encodeURIComponent(text);
+    const mailto = `mailto:amee@growlab.au?subject=${subject}&body=${body}`;
+    // mailto URLs have a character limit — use window.location for reliability
+    window.location.href = mailto;
+    return false;
+  }
+
+  // ── COPY ANSWERS ──────────────────────────────────────────────────
+  function copyAnswers() {
+    if (!validate()) return;
+    const { text } = buildText();
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('copyConfirm').classList.add('visible');
+      document.getElementById('copyConfirm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }).catch(() => {
+      // Fallback for older browsers
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      document.getElementById('copyConfirm').classList.add('visible');
+    });
+  }
+</script>
+</body>
+</html>
