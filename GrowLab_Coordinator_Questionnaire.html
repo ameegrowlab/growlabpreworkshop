@@ -222,11 +222,11 @@
     </div>
     <div class="how-step">
       <div class="step-num">2</div>
-      <div>Click <strong>Send to Amee</strong><br>opens your email, ready to send</div>
+      <div>Click <strong>Submit</strong><br>sends it straight to Amee</div>
     </div>
     <div class="how-step">
       <div class="step-num">3</div>
-      <div>If email doesn't open<br><strong>use Copy Answers instead</strong> and paste into an email to amee@growlab.au</div>
+      <div>If submit doesn't work<br><strong>use Copy Answers instead</strong> and paste into an email to amee@growlab.au</div>
     </div>
   </div>
 </div>
@@ -494,17 +494,25 @@
   <!-- ══ SUBMIT ═══════════════════════════════════════════════════════ -->
   <div class="submit-section">
     <h3>Ready to send?</h3>
-    <p>Click <strong>Send to Amee</strong> — this will open your email with your answers already filled in. Just hit send.<br>
+    <p>Click <strong>Submit</strong> — your answers are sent straight to Amee and logged automatically.<br>
     If that doesn't work, use <strong>Copy Answers</strong> and paste into an email to <strong>amee@growlab.au</strong></p>
     <div class="btn-row">
-      <a id="mailtoBtn" href="#" class="btn btn-primary" onclick="return submitMailto()">
-        ✉ Send to Amee
-      </a>
+      <button id="submitBtn" class="btn btn-primary" onclick="return submitForm()">
+        ✉ Submit
+      </button>
       <button class="btn btn-secondary" onclick="copyAnswers()">
         ⎘ Copy Answers
       </button>
     </div>
     <p class="btn-note">Fields marked <span style="color:var(--terra)">*</span> are required before submitting.</p>
+    <div class="copy-confirm" id="submitConfirm">
+      <strong>✓ Sent to Amee</strong>
+      Your answers have been submitted and logged. No further action needed.
+    </div>
+    <div class="copy-confirm" id="submitError">
+      <strong>✗ Something went wrong</strong>
+      Please use <strong>Copy Answers</strong> and paste into an email to <strong>amee@growlab.au</strong> instead.
+    </div>
     <div class="copy-confirm" id="copyConfirm">
       <strong>✓ Answers copied to clipboard</strong>
       Now paste into an email to <strong>amee@growlab.au</strong> with the subject line: <strong>Pre-Workshop Questionnaire — [Your School Name]</strong>
@@ -613,15 +621,65 @@
     return { text: lines.join('\n'), school };
   }
 
-  // ── MAILTO SUBMIT ─────────────────────────────────────────────────
-  function submitMailto() {
+  // ── FORM SUBMIT ────────────────────────────────────────────────────
+  const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbxpqfdb51ApIsgUcirnVn5qBn7x47rDk-HSidlRuCtBqIcmuVcLadSm2qTXKqEXxRrVvQ/exec';
+
+  function buildPayload() {
+    return {
+      name: val('name'),
+      role: val('role'),
+      school: val('school'),
+      program: val('program'),
+      format: val('format'),
+      date: val('wdate'),
+      time: val('wtime'),
+      room: val('room'),
+      students: val('students'),
+      year: val('year'),
+      ages: getCheckboxValues('ages'),
+      jobs: val('jobs'),
+      stream: getCheckboxValues('stream'),
+      careers: getCheckboxValues('careers'),
+      energy: val('energy'),
+      needs: val('needs'),
+      sensitive: val('sensitive'),
+      prior: val('prior'),
+      priorDetail: val('priorDetail'),
+      goal: val('goal'),
+      other: val('other'),
+      av: val('av'),
+      wifi: val('wifi'),
+      devices: val('devices'),
+      avnotes: val('avnotes'),
+    };
+  }
+
+  function submitForm() {
     if (!validate()) return false;
-    const { text, school } = buildText();
-    const subject = encodeURIComponent(`Pre-Workshop Questionnaire — ${school}`);
-    const body = encodeURIComponent(text);
-    const mailto = `mailto:amee@growlab.au?subject=${subject}&body=${body}`;
-    // mailto URLs have a character limit — use window.location for reliability
-    window.location.href = mailto;
+
+    document.getElementById('submitConfirm').classList.remove('visible');
+    document.getElementById('submitError').classList.remove('visible');
+
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    fetch(ENDPOINT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify(buildPayload()),
+    }).then(() => {
+      submitBtn.textContent = '✉ Submit';
+      submitBtn.disabled = false;
+      document.getElementById('submitConfirm').classList.add('visible');
+      document.getElementById('submitConfirm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }).catch(() => {
+      submitBtn.textContent = '✉ Submit';
+      submitBtn.disabled = false;
+      document.getElementById('submitError').classList.add('visible');
+      document.getElementById('submitError').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
     return false;
   }
 
