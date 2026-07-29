@@ -16,19 +16,27 @@ var FIELDS = [
 ];
 
 function doPost(e) {
-  var lock = LockService.getScriptLock();
-  lock.tryLock(10000);
   try {
     var data = JSON.parse(e.postData.contents);
-
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
     var row = [new Date()];
     FIELDS.forEach(function (field) {
       var value = data[field];
       if (Array.isArray(value)) value = value.join(', ');
       row.push(value || '');
     });
-    sheet.appendRow(row);
+
+    // Only the sheet write needs to be serialized; email sending can happen
+    // outside the lock so concurrent submissions don't queue up behind it.
+    var lock = LockService.getScriptLock();
+    if (!lock.tryLock(10000)) {
+      throw new Error('Could not acquire lock — another submission is in progress');
+    }
+    try {
+      var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+      sheet.appendRow(row);
+    } finally {
+      lock.releaseLock();
+    }
 
     var subject = 'Pre-Workshop Questionnaire — ' + (data.school || 'School');
     var bodyLines = FIELDS.map(function (field) {
@@ -49,7 +57,5 @@ function doPost(e) {
     return ContentService
       .createTextOutput(JSON.stringify({ result: 'error', error: err.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
-  } finally {
-    lock.releaseLock();
   }
 }

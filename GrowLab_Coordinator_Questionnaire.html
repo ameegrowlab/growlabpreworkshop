@@ -654,6 +654,8 @@
     };
   }
 
+  const SUBMIT_TIMEOUT_MS = 20000;
+
   function submitForm() {
     if (!validate()) return false;
 
@@ -664,16 +666,22 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';
 
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS);
+
     fetch(ENDPOINT_URL, {
       method: 'POST',
       mode: 'no-cors',
+      signal: controller.signal,
       body: JSON.stringify(buildPayload()),
     }).then(() => {
+      clearTimeout(timeout);
       submitBtn.textContent = '✉ Submit';
       submitBtn.disabled = false;
       document.getElementById('submitConfirm').classList.add('visible');
       document.getElementById('submitConfirm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }).catch(() => {
+      clearTimeout(timeout);
       submitBtn.textContent = '✉ Submit';
       submitBtn.disabled = false;
       document.getElementById('submitError').classList.add('visible');
